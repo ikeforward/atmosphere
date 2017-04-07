@@ -116,7 +116,7 @@ public class UUIDBroadcasterCache implements BroadcasterCache {
     }
 
     @Override
-    public CacheMessage addToCache(String broadcasterId, String uuid, BroadcastMessage message) {
+    public synchronized CacheMessage addToCache(String broadcasterId, String uuid, BroadcastMessage message) {
         if (logger.isTraceEnabled()) {
             logger.trace("Adding for AtmosphereResource {} cached messages {}", uuid, message.message());
             logger.trace("Active clients {}", activeClients());
@@ -144,7 +144,7 @@ public class UUIDBroadcasterCache implements BroadcasterCache {
     }
 
     @Override
-    public List<Object> retrieveFromCache(String broadcasterId, String uuid) {
+    public synchronized List<Object> retrieveFromCache(String broadcasterId, String uuid) {
     
         cacheCandidate(broadcasterId, uuid);
         ConcurrentLinkedQueue<CacheMessage> clientQueue = messages.get(uuid);
@@ -171,7 +171,7 @@ public class UUIDBroadcasterCache implements BroadcasterCache {
     }
 
     @Override
-    public BroadcasterCache clearCache(String broadcasterId, String uuid, CacheMessage message) {
+    public synchronized BroadcasterCache clearCache(String broadcasterId, String uuid, CacheMessage message) {
         ConcurrentLinkedQueue<CacheMessage> clientQueue = messages.get(uuid);
     
         if (clientQueue != null) {
